@@ -80,7 +80,7 @@ function getHandler(proxy) {
     return function (req, res) {
         req.theState = {
         };
-        const mainUrl = req.url.slice(1);
+        
         var cors_headers = withCORS({}, req);
         if (req.method === 'OPTIONS') {
             // Pre-flight request. Reply successfully:
@@ -88,12 +88,18 @@ function getHandler(proxy) {
             res.end();
             return;
         }
-        if (mainUrl.length !== 19) {
-            res.writeHead(400, 'Input must be 19 chars in length', cors_headers);
-            res.end('Input not long enough 19 chars required.');
+        const mainUrl = req.url.slice(1);
+        const parts = mainUrl.split("/");
+        if(parts.length !== 2) {
+            res.writeHead(400, 'url must have two arguments /cid/fid', cors_headers);
+            res.end('url must have two arguments /cid/fid.');
+        }
+        if (parts[0].length !== 19 || parts[1].length !== 19) {
+            res.writeHead(400, 'Both numbers must be 19 chars in length', cors_headers);
+            res.end('Both numbers must be 19 chars in length.');
             return;
         }
-        var location = `https://cdn.discordapp.com/attachments/1025526944776867952/${mainUrl}/blob`;
+        var location = `https://cdn.discordapp.com/attachments/${mainUrl}/blob`;
 
         corsAnywhere.removeHeaders.forEach(function (header) {
             delete req.headers[header];
