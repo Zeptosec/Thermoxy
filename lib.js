@@ -93,6 +93,7 @@ function getHandler(proxy) {
         if(parts.length !== 2) {
             res.writeHead(400, 'url must have two arguments /cid/fid', cors_headers);
             res.end('url must have two arguments /cid/fid.');
+            return;
         }
         if (parts[0].length !== 19 || parts[1].length !== 19) {
             res.writeHead(400, 'Both numbers must be 19 chars in length', cors_headers);
